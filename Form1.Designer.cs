@@ -28,8 +28,8 @@
         /// </summary>
         private void InitializeComponent()
         {
-            System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea4 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
-            System.Windows.Forms.DataVisualization.Charting.Series series4 = new System.Windows.Forms.DataVisualization.Charting.Series();
+            System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea3 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
+            System.Windows.Forms.DataVisualization.Charting.Series series3 = new System.Windows.Forms.DataVisualization.Charting.Series();
             this.splitContainer1 = new System.Windows.Forms.SplitContainer();
             this.splitContainer2 = new System.Windows.Forms.SplitContainer();
             this.cbExtremum = new System.Windows.Forms.ComboBox();
@@ -53,8 +53,10 @@
             this.nudMaxGenerations = new System.Windows.Forms.NumericUpDown();
             this.label1 = new System.Windows.Forms.Label();
             this.btStart = new System.Windows.Forms.Button();
-            this.chart1 = new System.Windows.Forms.DataVisualization.Charting.Chart();
             this.txtLog = new System.Windows.Forms.TextBox();
+            this.chart1 = new System.Windows.Forms.DataVisualization.Charting.Chart();
+            this.nudCheckFunctionValue = new System.Windows.Forms.NumericUpDown();
+            this.cbCheckWithFunctionValue = new System.Windows.Forms.CheckBox();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
             this.splitContainer1.Panel1.SuspendLayout();
             this.splitContainer1.Panel2.SuspendLayout();
@@ -72,6 +74,7 @@
             ((System.ComponentModel.ISupportInitialize)(this.nudMaxEqualGenerations)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.nudMaxGenerations)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.chart1)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.nudCheckFunctionValue)).BeginInit();
             this.SuspendLayout();
             // 
             // splitContainer1
@@ -89,8 +92,8 @@
             // splitContainer1.Panel2
             // 
             this.splitContainer1.Panel2.Controls.Add(this.chart1);
-            this.splitContainer1.Size = new System.Drawing.Size(1121, 626);
-            this.splitContainer1.SplitterDistance = 315;
+            this.splitContainer1.Size = new System.Drawing.Size(1121, 746);
+            this.splitContainer1.SplitterDistance = 324;
             this.splitContainer1.TabIndex = 2;
             // 
             // splitContainer2
@@ -104,6 +107,8 @@
             // 
             // splitContainer2.Panel1
             // 
+            this.splitContainer2.Panel1.Controls.Add(this.cbCheckWithFunctionValue);
+            this.splitContainer2.Panel1.Controls.Add(this.nudCheckFunctionValue);
             this.splitContainer2.Panel1.Controls.Add(this.cbExtremum);
             this.splitContainer2.Panel1.Controls.Add(this.label10);
             this.splitContainer2.Panel1.Controls.Add(this.tbFunction);
@@ -129,8 +134,8 @@
             // splitContainer2.Panel2
             // 
             this.splitContainer2.Panel2.Controls.Add(this.txtLog);
-            this.splitContainer2.Size = new System.Drawing.Size(315, 626);
-            this.splitContainer2.SplitterDistance = 458;
+            this.splitContainer2.Size = new System.Drawing.Size(324, 746);
+            this.splitContainer2.SplitterDistance = 508;
             this.splitContainer2.TabIndex = 22;
             // 
             // cbExtremum
@@ -273,7 +278,7 @@
             this.nudMaxPopulationSize.Size = new System.Drawing.Size(120, 20);
             this.nudMaxPopulationSize.TabIndex = 32;
             this.nudMaxPopulationSize.Value = new decimal(new int[] {
-            500,
+            100,
             0,
             0,
             0});
@@ -415,27 +420,13 @@
             // 
             // btStart
             // 
-            this.btStart.Location = new System.Drawing.Point(13, 427);
+            this.btStart.Location = new System.Drawing.Point(13, 474);
             this.btStart.Name = "btStart";
             this.btStart.Size = new System.Drawing.Size(75, 23);
             this.btStart.TabIndex = 22;
             this.btStart.Text = "Старт";
             this.btStart.UseVisualStyleBackColor = true;
             this.btStart.Click += new System.EventHandler(this.button1_Click);
-            // 
-            // chart1
-            // 
-            chartArea4.Name = "ChartArea1";
-            this.chart1.ChartAreas.Add(chartArea4);
-            this.chart1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.chart1.Location = new System.Drawing.Point(0, 0);
-            this.chart1.Name = "chart1";
-            series4.ChartArea = "ChartArea1";
-            series4.Name = "Series1";
-            this.chart1.Series.Add(series4);
-            this.chart1.Size = new System.Drawing.Size(802, 626);
-            this.chart1.TabIndex = 2;
-            this.chart1.Text = "chart1";
             // 
             // txtLog
             // 
@@ -444,14 +435,63 @@
             this.txtLog.Multiline = true;
             this.txtLog.Name = "txtLog";
             this.txtLog.ReadOnly = true;
-            this.txtLog.Size = new System.Drawing.Size(315, 164);
+            this.txtLog.Size = new System.Drawing.Size(324, 234);
             this.txtLog.TabIndex = 0;
+            // 
+            // chart1
+            // 
+            chartArea3.Name = "ChartArea1";
+            this.chart1.ChartAreas.Add(chartArea3);
+            this.chart1.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.chart1.Location = new System.Drawing.Point(0, 0);
+            this.chart1.Name = "chart1";
+            series3.ChartArea = "ChartArea1";
+            series3.Name = "Series1";
+            this.chart1.Series.Add(series3);
+            this.chart1.Size = new System.Drawing.Size(793, 746);
+            this.chart1.TabIndex = 2;
+            this.chart1.Text = "chart1";
+            // 
+            // nudCheckFunctionValue
+            // 
+            this.nudCheckFunctionValue.DecimalPlaces = 3;
+            this.nudCheckFunctionValue.Location = new System.Drawing.Point(13, 439);
+            this.nudCheckFunctionValue.Maximum = new decimal(new int[] {
+            10000000,
+            0,
+            0,
+            0});
+            this.nudCheckFunctionValue.Minimum = new decimal(new int[] {
+            10000000,
+            0,
+            0,
+            -2147483648});
+            this.nudCheckFunctionValue.Name = "nudCheckFunctionValue";
+            this.nudCheckFunctionValue.Size = new System.Drawing.Size(120, 20);
+            this.nudCheckFunctionValue.TabIndex = 46;
+            this.nudCheckFunctionValue.Value = new decimal(new int[] {
+            6285,
+            0,
+            0,
+            196608});
+            this.nudCheckFunctionValue.ValueChanged += new System.EventHandler(this.nudFunctionValue_ValueChanged);
+            this.nudCheckFunctionValue.MouseClick += new System.Windows.Forms.MouseEventHandler(this.nudCheckFunctionValue_MouseClick);
+            // 
+            // cbCheckWithFunctionValue
+            // 
+            this.cbCheckWithFunctionValue.AutoSize = true;
+            this.cbCheckWithFunctionValue.Location = new System.Drawing.Point(13, 416);
+            this.cbCheckWithFunctionValue.Name = "cbCheckWithFunctionValue";
+            this.cbCheckWithFunctionValue.Size = new System.Drawing.Size(212, 17);
+            this.cbCheckWithFunctionValue.TabIndex = 47;
+            this.cbCheckWithFunctionValue.Text = "Сверять с известным значение ЦФ:";
+            this.cbCheckWithFunctionValue.UseVisualStyleBackColor = true;
             // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1121, 626);
+            this.ClientSize = new System.Drawing.Size(1121, 746);
             this.Controls.Add(this.splitContainer1);
             this.Name = "Form1";
             this.Text = "Нахождение глобального экстремума";
@@ -474,6 +514,7 @@
             ((System.ComponentModel.ISupportInitialize)(this.nudMaxEqualGenerations)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.nudMaxGenerations)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.chart1)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.nudCheckFunctionValue)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -504,6 +545,8 @@
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.Button btStart;
         private System.Windows.Forms.TextBox txtLog;
+        private System.Windows.Forms.CheckBox cbCheckWithFunctionValue;
+        private System.Windows.Forms.NumericUpDown nudCheckFunctionValue;
     }
 }
 

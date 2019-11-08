@@ -78,6 +78,26 @@ namespace ga
             {
                 isMaxExtremum = false;
             }
+            double checkWithFunctionValue = Double.NaN;
+            if (cbCheckWithFunctionValue.Checked)
+            {
+                checkWithFunctionValue = (double)nudCheckFunctionValue.Value;
+            }
+
+                try
+            {
+                Expression tex = new Expression(txtFunction);
+                tex.Parameters["x"] = minValue;
+                tex.Evaluate();
+            } catch(Exception ex)
+            {
+                log = String.Format("Ошибка валидации функции {0} в точке {1}\r\n", txtFunction, minValue);
+                log += String.Format("Возникла ошибка:{0}\r\n", ex.Message);
+                log += String.Format("Стек трейс:\r\n{0}\r\n", ex.StackTrace);
+                txtLog.Text = log;
+                lockControls(false);
+                return;
+            }
 
             plotData = new ConcurrentBag<KeyValuePair<int, double>>();
             Population population = null;
@@ -97,17 +117,17 @@ namespace ga
                 return;
             }
 
-            log = await Task.Run(() => Start(maxGenerations, maxEqualGenerations, population));
+            log = await Task.Run(() => Start(maxGenerations, maxEqualGenerations, population, checkWithFunctionValue));
             txtLog.Text = log;
             Console.WriteLine("Exit task");
 
             lockControls(false);
         }
-
-        private string Start(decimal maxGenerations, decimal maxEqualGenerations, Population population)
+            private string Start(decimal maxGenerations, decimal maxEqualGenerations, Population population, double checkWithFunctionValue)
         {
-            string log;
+            string log = String.Empty;
             double lastValue = 0;
+            int lastValueGeneration = 0;
             int equalCount = 0;
 
             Stopwatch stopwatch = new Stopwatch();
@@ -139,6 +159,7 @@ namespace ga
                         else
                         {
                             equalCount = 0;
+                            lastValueGeneration = population.generation;
                         }
                         lastValue = t.value;
                     }
@@ -150,19 +171,41 @@ namespace ga
                 }
             } catch(Exception ex)
             {
-                stopwatch.Stop();
-                log = String.Format("Прошло поколений: {0}\r\n", population.generation);
-                log += String.Format("Прошло времени: {0} секунд\r\n", (int)stopwatch.Elapsed.TotalSeconds);
-                log += String.Format("Значение ЦФ: {0}\r\n", lastValue);
                 log += String.Format("Возникла ошибка:{0}\r\n", ex.Message);
                 log += String.Format("Стек трейс:\r\n{0}\r\n", ex.StackTrace);
+            } finally
+            {
+                stopwatch.Stop();
             }
 
             stopwatch.Stop();
-            log = String.Format("Прошло поколений: {0}\r\n", population.generation);
+            log += String.Format("Функция: {0}\r\n", population.txtFunction);
+            if (population.isMaxExtremum)
+            {
+                log += String.Format("Экстремум: {0}\r\n", "Максимум");
+            }
+            else
+            {
+                log += String.Format("Экстремум: {0}\r\n", "Минимум");
+            }
+            log += String.Format("Прошло поколений: {0}\r\n", population.generation);
             log += String.Format("Прошло времени: {0} секунд\r\n", (int)stopwatch.Elapsed.TotalSeconds);
-            log += String.Format("Значение ЦФ: {0}\r\n", lastValue);
-
+                        log += String.Format("Найденное значение ЦФ: {0}\r\n", lastValue);
+            if (!Double.IsNaN(checkWithFunctionValue))
+            {
+                log += String.Format("Известное значение ЦФ: {0}\r\n", checkWithFunctionValue);
+                double t = Math.Round(100 - (((Math.Abs(checkWithFunctionValue - lastValue) * 100)) / checkWithFunctionValue), 2);
+                log += String.Format("Точность: {0}%\r\n", t);
+            }
+            log += String.Format("Решение найдно на поколении: {0}\r\n", lastValueGeneration);
+            log += String.Format("Максимальное количество поколений: {0}\r\n", maxGenerations);
+            log += String.Format("Интервал изменений хромосом: [{0}, {1}]\r\n", population.minValue, population.maxValue);
+            log += String.Format("Макс. кол-во поколений при постоянном значении ЦФ: {0}\r\n", maxEqualGenerations);
+            log += String.Format("Максимальный размер популяции: {0}\r\n", population.maxPopulationSize);
+            log += String.Format("Начальный размер популяции: {0}\r\n", population.initPopulationSize);
+            log += String.Format("Вероятность скрещивания: {0}%\r\n", population.crossPossibility * 100);
+            log += String.Format("Вероятность мутации: {0}%\r\n", population.mutationPossibility * 100);
+            
             return log;
         }
 
@@ -209,6 +252,16 @@ namespace ga
                 MessageBox.Show(String.Format("Возникла ошибка при построении графика ({0})", ex.Message), "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
             }
+        }
+
+        private void nudFunctionValue_ValueChanged(object sender, EventArgs e)
+        {
+            if (!cbCheckWithFunctionValue.Checked) cbCheckWithFunctionValue.Checked = true;
+        }
+
+        private void nudCheckFunctionValue_MouseClick(object sender, MouseEventArgs e)
+        {
+            if (!cbCheckWithFunctionValue.Checked) cbCheckWithFunctionValue.Checked = true;
         }
     }
 }

@@ -9,16 +9,16 @@ namespace ga
     public class Population
     {
         private List<Сhromosome> population;
-        private double minValue;
-        private double maxValue;
-        private int maxPopulationSize;
-        private double crossPossibility;
-        private double mutationPossibility;
-        private int roundVal = 3;
+        public double minValue { get; private set; }
+        public double maxValue { get; private set; }
+        public int maxPopulationSize { get; private set; }
+        public double crossPossibility { get; private set; }
+        public double mutationPossibility { get; private set; }
+        public int roundVal { get; private set; } = 3;
         private Func<string, double, double> fitnessFunction;
-        private string txtFunction;
-        private int initPopulationSize;
-        private bool isMaxExtremum;
+        public string txtFunction { get; private set; }
+        public int initPopulationSize { get; private set; }
+        public bool isMaxExtremum { get; private set; }
         public int generation { get; protected set;  }
         public Population(double minValue, double maxValue, int maxPopulationSize, double crossPossibility, double mutationPossibility, 
                           int initPopulationSize, string txtFunction, Func<string, double, double> fitnessFunction, bool isMaxExtremum)
@@ -40,16 +40,15 @@ namespace ga
         {
             double roundedVal = Math.Round(val, roundVal);
             double fitnessValue = fitnessFunction(txtFunction, val);
-            if (Double.IsNaN(fitnessValue))
+            if (!Double.IsNaN(fitnessValue))
             {
-                throw new Exception("Function evaluation error!");
-            }
-            Сhromosome nc = new Сhromosome(roundedVal, fitnessValue);
+                Сhromosome nc = new Сhromosome(roundedVal, fitnessValue);
 
-            bool alreadyExists = population.Any(x => x.value.Equals(roundedVal));
-            if (!alreadyExists)
-            {
-                population.Add(new Сhromosome(roundedVal, fitnessValue));
+                bool alreadyExists = population.Any(x => x.value.Equals(roundedVal));
+                if (!alreadyExists)
+                {
+                    population.Add(new Сhromosome(roundedVal, fitnessValue));
+                }
             }
         }
         public void Init(int populationSize)
@@ -62,11 +61,6 @@ namespace ga
             for (int i = 0; i < populationSize; i++)
             {
                 double randomNumber = Util.NextDouble(minValue, maxValue);
-                double fitnessValue = fitnessFunction(txtFunction, randomNumber);
-                if(Double.IsNaN(fitnessValue))
-                {
-                    throw new Exception("Function evaluation error!");
-                }
                 Add(randomNumber);
             }
         }
@@ -117,10 +111,6 @@ namespace ga
         private void Cross(Сhromosome x, Сhromosome y)
         {
             double xy = Cross(x.value, y.value);
-            if (Double.IsNaN(xy))
-            {
-                throw new Exception("isNaN");
-            }
             Add(xy);
         }
         public void TestChromosomes()
@@ -214,10 +204,6 @@ namespace ga
         private void Mutation(Сhromosome x)
         {
             double z = Mutation(x.value);
-            if (Double.IsNaN(z))
-            {
-                throw new Exception("isNaN");
-            }
             Add(z);
         }
         static protected double Mutation(double val)
